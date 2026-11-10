@@ -3,7 +3,7 @@ import type { UserConfig } from './types'
 export const defaultConfig: UserConfig = {
   title:       'Narissa Tsuboi',
   description: 'Talks, conferences, and things I\'ve learned',
-  url:         'https://narissatsuboi.github.io/mysite',
+  url:         'https://narissatsuboi.com',
 
   author: {
     name: 'Narissa Tsuboi',

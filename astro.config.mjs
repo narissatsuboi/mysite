@@ -10,8 +10,8 @@ import { resolveVaultImagePaths, imageAttributes, galleryGrouping } from './src/
 
 // https://astro.build/config
 export default defineConfig({
-  site: process.env.SITE || 'https://narissatsuboi.github.io',
-  base: process.env.BASE || '/mysite',
+  site: process.env.SITE || 'https://narissatsuboi.com',
+  base: process.env.BASE || '/',
 
   vite: {
     plugins: [tailwindcss()],

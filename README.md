@@ -1,9 +1,9 @@
-# narissatsuboi.github.io/mysite
+# narissatsuboi.com
 
 My personal site: blog posts, talks, and an About page. Built with Astro on the
 Patrika theme and deployed to GitHub Pages.
 
-Live at **https://narissatsuboi.github.io/mysite/**
+Live at **https://narissatsuboi.com**
 
 ## Run it locally
 
@@ -12,7 +12,7 @@ npm install
 npm run dev
 ```
 
-Open http://localhost:4321/mysite/ (note the `/mysite/` part; the root URL is a 404).
+Open http://localhost:4321/.
 The dev server reloads as you edit. It also shows drafts, so check the live site
 before assuming something is published.
 
@@ -105,10 +105,8 @@ Thank you, Photos, Slides, Related.
   work.
 - Don't use `[[wikilinks]]` to link between pages. They point to `/notes/...`
   pages that don't exist on this site.
-- Don't start links in the body with `/` (for example `/talks`). The site lives
-  under `/mysite/`, so those links break. Use full URLs
-  (`https://narissatsuboi.github.io/mysite/talks/`) instead. Front matter paths
-  like `slidesPdf` and `cover` are handled for you.
+- Link to other pages on the site with root paths, for example
+  `[my WAL talk](/talks/from-wal-to-kafka)`.
 
 ## Publish
 
@@ -120,22 +118,19 @@ can stay cached in your browser for up to 10 minutes, so hard refresh
 To check a production build locally first (drafts hidden), run
 `npm run build && npm run preview`.
 
-## Moving to narissatsuboi.com
+## Domain
 
-Once I own the domain:
-
-1. Add `public/CNAME` containing `narissatsuboi.com`.
-2. In `.github/workflows/deploy.yml`, set `SITE: https://narissatsuboi.com` and
-   `BASE: /`. Make the same change to the defaults in `astro.config.mjs`.
-3. Set `url` in `src/content/siteConfig/config.yaml` to `https://narissatsuboi.com`.
-4. Add GitHub Pages' DNS records at the registrar and set the custom domain in
-   the repo's Settings, then Pages.
+The domain is registered with Squarespace. Its DNS points at GitHub Pages: four
+A records and four AAAA records on `@`, plus a `www` CNAME to
+`narissatsuboi.github.io`. The custom domain is set in the repo under
+Settings, then Pages. Keep `public/CNAME` in the repo; deleting it takes the
+domain off the site.
 
 ## Commands
 
 | Command           | What it does                                                 |
 | :---------------- | :----------------------------------------------------------- |
 | `npm install`     | Install dependencies                                         |
-| `npm run dev`     | Dev server at `localhost:4321/mysite/` (shows drafts)        |
+| `npm run dev`     | Dev server at `localhost:4321` (shows drafts)                |
 | `npm run build`   | Build to `dist/` and build the search index                  |
 | `npm run preview` | Serve the production build locally                           |

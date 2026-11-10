@@ -29,8 +29,8 @@ jobs:
       - run: npm ci
       - name: Build
         env:
-          SITE: https://narissatsuboi.github.io
-          BASE: /mysite
+          SITE: https://narissatsuboi.com
+          BASE: /
         run: npm run build
       - uses: actions/upload-pages-artifact@v3
         with:
