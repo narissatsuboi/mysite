@@ -32,7 +32,6 @@ thanks:
     url: https://www.linkedin.com/in/ardentperf/
     note: Thank you for encouraging me to speak on this topic, and for teaching me about the WAL!
 # Remove this line to publish the talk.
-draft: true
 ---
 
 I gave this talk at the [Seattle Postgres](https://www.meetup.com/seattle-postgres/) meetup in June 2026. Using a fictitious scenario where the audience and myself are software engineers at a fictitious AI company with a fictitious AI agent (Anthropix and Clyde), we learned how Postgres logical replication, together with replication slots and the Debezium connector, turn row-level changes into Kafka event streams via Change Data Capture -- and how CDC can power downstream operations at Anthropix as it scales.

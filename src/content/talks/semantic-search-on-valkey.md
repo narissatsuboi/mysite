@@ -42,7 +42,6 @@ related:
 #     url: https://example.com
 #     note: A short personal thank-you.
 # Remove this line to publish the talk.
-draft: true
 ---
 
 I gave this talk at [Puget Sound Programming Python (PuPPy)](https://www.pspython.com/) in August 2026. The focus was semantic search against a cache as a way to save money on RAG pipeline calls and agentic spend, with a demo using [valkey-py](https://github.com/valkey-io/valkey-py), the open source Python client, and `valkey-search` to search RGB color vectors by RGB ratio similarity. Semantic search support was added to the Valkey client as of March 2026. I learned about it at ValkeyConf and that's how I found this topic!
