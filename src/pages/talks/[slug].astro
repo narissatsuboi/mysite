@@ -98,22 +98,6 @@ const links = [
         </section>
       )}
 
-      {data.related.length > 0 && (
-        <section class="not-prose mt-10">
-          <h2 class="mb-3 font-mono text-xs uppercase text-muted-foreground/70">Related</h2>
-          <ul class="space-y-3">
-            {data.related.map((r) => (
-              <li>
-                {r.url
-                  ? <a href={r.url.startsWith("/") ? getAssetPath(r.url) : r.url} class="font-serif text-lg hover:underline">{r.title}</a>
-                  : <span class="font-serif text-lg">{r.title}</span>}
-                {r.note && <p class="text-sm text-muted-foreground">{r.note}</p>}
-              </li>
-            ))}
-          </ul>
-        </section>
-      )}
-
       {data.thanks.length > 0 && (
         <section class="not-prose mt-10">
           <h2 class="mb-3 font-mono text-xs uppercase text-muted-foreground/70">Thank you</h2>
@@ -162,6 +146,22 @@ const links = [
           <p class="mt-2 font-mono text-xs text-muted-foreground">
             <a class="hover:underline" href={getAssetPath(data.slidesPdf)}>Open PDF in a new tab →</a>
           </p>
+        </section>
+      )}
+
+      {data.related.length > 0 && (
+        <section class="not-prose mt-10">
+          <h2 class="mb-3 font-mono text-xs uppercase text-muted-foreground/70">Related</h2>
+          <ul class="space-y-3">
+            {data.related.map((r) => (
+              <li>
+                {r.url
+                  ? <a href={r.url.startsWith("/") ? getAssetPath(r.url) : r.url} class="font-serif text-lg hover:underline">{r.title}</a>
+                  : <span class="font-serif text-lg">{r.title}</span>}
+                {r.note && <p class="text-sm text-muted-foreground">{r.note}</p>}
+              </li>
+            ))}
+          </ul>
         </section>
       )}
     </article>
