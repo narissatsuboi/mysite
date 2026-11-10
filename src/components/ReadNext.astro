@@ -1,0 +1,29 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { getPostUrl } from "@/utils/content";
+import { formatDate } from "@/utils/text";
+
+interface Props {
+  posts: CollectionEntry<"posts">[];
+}
+
+const { posts } = Astro.props;
+---
+
+{posts.length > 0 && (
+  <section class="not-prose mt-12 border-t border-border/50 pt-6">
+    <h2 class="mb-4 font-mono text-xs uppercase text-muted-foreground/70">Read next</h2>
+    <ul class="space-y-3">
+      {posts.map((p) => (
+        <li class="flex items-baseline justify-between gap-4">
+          <a href={getPostUrl(p.id, p.filePath)} class="font-serif text-lg hover:underline">
+            {p.data.title}
+          </a>
+          <time datetime={p.data.published.toISOString()} class="shrink-0 font-mono text-xs text-muted-foreground tabular-nums">
+            {formatDate(p.data.published)}
+          </time>
+        </li>
+      ))}
+    </ul>
+  </section>
+)}

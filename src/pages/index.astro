@@ -1,0 +1,36 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import PostList from "@/components/PostList.astro";
+import Section from "@/components/Section.astro";
+import StructuredData from "@/components/StructuredData.astro";
+import { getConfig } from "@/utils/config";
+import { getAllFeedEntries } from "@/utils/content";
+import { absoluteUrl } from "@/utils/url";
+
+const siteConfig = await getConfig();
+const allPosts = await getAllFeedEntries();
+
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: siteConfig.title,
+  description: siteConfig.description,
+  url: absoluteUrl("/", Astro.site),
+  author: { "@type": "Person", name: siteConfig.author.name, url: siteConfig.author.url },
+};
+---
+
+<BaseLayout>
+  <StructuredData schema={schema} slot="head" />
+  <div class="layout-content">
+    <header class="mt-2 border-b border-border/50 py-6 md:mt-4 md:py-8">
+      <h1 class="sr-only">{siteConfig.title}</h1>
+      <p class="font-serif text-3xl leading-tight tracking-tight">
+        {siteConfig.heroText}
+      </p>
+    </header>
+    <Section>
+      <PostList entries={allPosts} />
+    </Section>
+  </div>
+</BaseLayout>

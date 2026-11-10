@@ -1,0 +1,32 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import PageHeader from "@/components/PageHeader.astro";
+import PostFeed from "@/components/PostFeed.astro";
+import Section from "@/components/Section.astro";
+import { getAllPosts, getAllTags } from "@/utils/content";
+import { slugify } from "@/utils/text";
+
+export async function getStaticPaths() {
+  const tags = await getAllTags();
+  const posts = await getAllPosts();
+
+  return tags.map(({ tag, slug }) => ({
+    params: { tag: slug },
+    props: {
+      tag,
+      posts: posts.filter((p) => (p.data.tags ?? []).some((t) => slugify(t) === slug)),
+    },
+  }));
+}
+
+const { tag, posts } = Astro.props;
+---
+
+<BaseLayout title={`#${tag}`}>
+  <div class="layout-content">
+    <PageHeader eyebrow="Tag" title={tag} />
+    <Section>
+      <PostFeed posts={posts} variant="archive" />
+    </Section>
+  </div>
+</BaseLayout>

@@ -1,0 +1,49 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { getPostUrl } from "@/utils/content";
+import { getAssetPath } from "@/utils/url";
+import { formatDate } from "@/utils/text";
+
+interface Props {
+  entries: (CollectionEntry<"posts"> | CollectionEntry<"talks">)[];
+}
+
+const { entries } = Astro.props;
+
+// Plain list grouped by year: title and date, nothing else
+const items = entries.map((e) =>
+  e.collection === "talks"
+    ? { title: e.data.title, date: e.data.date, href: getAssetPath(`talks/${e.id}`), isTalk: true }
+    : { title: e.data.title, date: e.data.published, href: getPostUrl(e.id, e.filePath), isTalk: false }
+);
+
+const years = [...new Set(items.map((i) => i.date.getUTCFullYear()))].sort((a, b) => b - a);
+---
+
+<div class="space-y-10">
+  {years.map((year) => (
+    <section>
+      <h2 class="mb-4 font-serif text-2xl font-light">{year}</h2>
+      <ul class="space-y-2">
+        {items
+          .filter((i) => i.date.getUTCFullYear() === year)
+          .map((i) => (
+            <li class="flex flex-wrap items-baseline gap-x-3">
+              <a href={i.href} class="font-serif text-lg hover:underline">{i.title}</a>
+              {i.isTalk && (
+                <span class="rounded-xs border border-border px-1 font-mono text-[10px] uppercase tracking-wide text-muted-foreground">
+                  Talk
+                </span>
+              )}
+              <time
+                datetime={i.date.toISOString()}
+                class="font-mono text-xs text-muted-foreground tabular-nums"
+              >
+                {formatDate(i.date)}
+              </time>
+            </li>
+          ))}
+      </ul>
+    </section>
+  ))}
+</div>

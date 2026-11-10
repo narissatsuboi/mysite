@@ -1,0 +1,24 @@
+---
+import { getTagUrl } from "@/utils/content";
+
+interface Props {
+  tags?: string[];
+}
+
+const { tags = [] } = Astro.props;
+---
+
+{tags.length > 0 && (
+  <ul class="not-prose flex flex-wrap gap-2">
+    {tags.map((tag) => (
+      <li>
+        <a
+          href={getTagUrl(tag)}
+          class="rounded-xs border border-border px-1 font-mono text-xs text-muted-foreground hover:text-foreground"
+        >
+          {tag}
+        </a>
+      </li>
+    ))}
+  </ul>
+)}

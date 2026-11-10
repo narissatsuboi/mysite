@@ -1,0 +1,169 @@
+---
+import { Image, getImage } from "astro:assets";
+import type { ImageMetadata } from "astro";
+import { render } from "astro:content";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { getAllTalks } from "@/utils/content";
+import { getAssetPath } from "@/utils/url";
+import { formatDate } from "@/utils/text";
+
+export async function getStaticPaths() {
+  const talks = await getAllTalks();
+  return talks.map((talk) => ({ params: { slug: talk.id }, props: { talk } }));
+}
+
+const { talk } = Astro.props;
+const { Content } = await render(talk);
+const { data } = talk;
+
+// The cover photo is shown at the top, so the Photos grid only holds the others
+const coverPhoto = data.cover ? data.photos.find((p) => p.image.src === data.cover!.src) : undefined;
+const gridPhotos = data.photos.filter((p) => p.image.src !== data.cover?.src);
+
+// Larger WebP versions that photos link to when clicked
+const fullSize = (img: ImageMetadata) => getImage({ src: img, width: 1600, format: "webp" });
+const coverFull = data.cover ? await fullSize(data.cover) : undefined;
+const gridFull = await Promise.all(gridPhotos.map((p) => fullSize(p.image)));
+
+const links = [
+  data.rsvpUrl && { label: "RSVP", url: data.rsvpUrl },
+  data.slides && { label: "Slides", url: data.slides },
+  data.slidesPdf && { label: "Slides (PDF)", url: getAssetPath(data.slidesPdf) },
+  data.video && { label: "Video", url: data.video },
+  ...data.repos.map((r) => ({
+    label: data.repos.length === 1 ? "Code" : `Code: ${r.title}`,
+    url: r.url,
+  })),
+].filter(Boolean) as { label: string; url: string }[];
+---
+
+<BaseLayout title={data.title} description={data.description}>
+  <div class="layout-content">
+    <article class="markdown-content mx-auto max-w-4xl py-8">
+      <a
+        href={getAssetPath("talks")}
+        class="not-prose font-mono text-xs uppercase tracking-wide text-clay hover:underline"
+      >
+        ← Talks
+      </a>
+
+      <h1 class="not-prose mt-8 font-serif text-4xl leading-tight">{data.title}</h1>
+      <p class="not-prose mt-3 font-mono text-xs uppercase text-muted-foreground">
+        {formatDate(data.date)} · {data.eventUrl ? <a href={data.eventUrl} class="underline underline-offset-4 hover:text-foreground">{data.event}</a> : data.event}{data.location ? ` · ${data.location}` : ""}
+      </p>
+      <p class="not-prose mt-3 text-muted-foreground">{data.description}</p>
+
+      {links.length > 0 && (
+        <ul class="not-prose mt-4 flex flex-wrap gap-4 font-mono text-sm">
+          {links.map((l) => <li><a class="text-clay hover:underline" href={l.url}>{l.label} →</a></li>)}
+        </ul>
+      )}
+
+      <hr class="not-prose mt-6 border-border/50" />
+
+      {data.cover && coverFull && (
+        <figure class="mt-8 mb-8">
+          <a href={coverFull.src} target="_blank" rel="noopener">
+            <Image
+              src={data.cover}
+              alt={coverPhoto?.alt ?? data.title}
+              width={1200}
+              {...(data.coverFit === "cover" ? { height: 800 } : {})}
+              loading="eager"
+              class:list={[
+                "w-full",
+                data.coverFit === "cover" ? "aspect-[3/2] object-cover" : "h-auto border border-border",
+              ]}
+            />
+          </a>
+          {coverPhoto?.caption && (
+            <figcaption class="mt-1 text-sm text-muted-foreground">{coverPhoto.caption}</figcaption>
+          )}
+        </figure>
+      )}
+
+      <Content />
+
+      {data.repos.length > 0 && (
+        <section class="not-prose mt-10">
+          <h2 class="mb-3 font-mono text-xs uppercase text-muted-foreground/70">Demo code</h2>
+          <ul class="space-y-3">
+            {data.repos.map((r) => (
+              <li>
+                <a href={r.url} class="font-serif text-lg hover:underline">{r.title} →</a>
+                {r.description && <p class="text-sm text-muted-foreground">{r.description}</p>}
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      {data.related.length > 0 && (
+        <section class="not-prose mt-10">
+          <h2 class="mb-3 font-mono text-xs uppercase text-muted-foreground/70">Related</h2>
+          <ul class="space-y-3">
+            {data.related.map((r) => (
+              <li>
+                {r.url
+                  ? <a href={r.url.startsWith("/") ? getAssetPath(r.url) : r.url} class="font-serif text-lg hover:underline">{r.title}</a>
+                  : <span class="font-serif text-lg">{r.title}</span>}
+                {r.note && <p class="text-sm text-muted-foreground">{r.note}</p>}
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      {data.thanks.length > 0 && (
+        <section class="not-prose mt-10">
+          <h2 class="mb-3 font-mono text-xs uppercase text-muted-foreground/70">Thank you</h2>
+          <ul class="space-y-3">
+            {data.thanks.map((t) => (
+              <li>
+                {t.url
+                  ? <a href={t.url} class="font-serif text-lg hover:underline">{t.name}</a>
+                  : <span class="font-serif text-lg">{t.name}</span>}
+                {t.role && <span class="font-mono text-xs text-muted-foreground"> · {t.role}</span>}
+                {t.note && <p class="text-sm text-muted-foreground">{t.note}</p>}
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      {gridPhotos.length > 0 && (
+        <section class="not-prose mt-10">
+          <h2 class="mb-3 font-mono text-xs uppercase text-muted-foreground/70">Photos</h2>
+          <div class="grid gap-4 sm:grid-cols-2">
+            {gridPhotos.map((p, i) => (
+              <figure class:list={{ "sm:col-span-2": i === 0 && gridPhotos.length % 2 === 1 }}>
+                <a href={gridFull[i].src} target="_blank" rel="noopener">
+                  <Image src={p.image} alt={p.alt} width={1200} height={900} class="aspect-[4/3] w-full object-cover" />
+                </a>
+                {p.caption && (
+                  <figcaption class="mt-1 text-sm text-muted-foreground">{p.caption}</figcaption>
+                )}
+              </figure>
+            ))}
+          </div>
+        </section>
+      )}
+      {data.slidesPdf && (
+        <section class="not-prose mt-10">
+          <h2 class="mb-3 font-mono text-xs uppercase text-muted-foreground/70">Slides</h2>
+          <div class="aspect-video w-full overflow-hidden border border-border">
+            <iframe
+              src={`${getAssetPath(data.slidesPdf)}#view=FitH`}
+              title={`Slides: ${data.title}`}
+              class="h-full w-full"
+              loading="lazy"
+            ></iframe>
+          </div>
+          <p class="mt-2 font-mono text-xs text-muted-foreground">
+            <a class="hover:underline" href={getAssetPath(data.slidesPdf)}>Open PDF in a new tab →</a>
+          </p>
+        </section>
+      )}
+    </article>
+  </div>
+</BaseLayout>

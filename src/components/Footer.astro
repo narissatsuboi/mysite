@@ -1,0 +1,28 @@
+---
+import { getConfig } from "@/utils/config";
+import SocialLinks from "@/components/SocialLinks.astro";
+import { getAssetPath } from "@/utils/url";
+
+const siteConfig = await getConfig();
+---
+<footer class="mt-12 border-t border-border">
+  <div class="layout-page flex h-16 flex-wrap items-center justify-between gap-2">
+    <div class="flex items-center gap-4">
+      <span class="font-mono text-xs uppercase tracking-wide text-muted-foreground">
+        {siteConfig.title}
+      </span>
+      <SocialLinks />
+    </div>
+
+    <div class="flex items-center gap-4">
+      <nav class="flex gap-4 font-mono text-xs text-muted-foreground">
+        {siteConfig.footerLinks?.map((item) => (
+          <a href={getAssetPath(item.url)} class="hover:text-foreground">{item.title}</a>
+        ))}
+      </nav>
+      <span class="font-mono text-xs text-muted-foreground/70">
+        Astro · Tailwind
+      </span>
+    </div>
+  </div>
+</footer>

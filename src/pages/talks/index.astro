@@ -1,0 +1,100 @@
+---
+import { Image } from "astro:assets";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import PageHeader from "@/components/PageHeader.astro";
+import Section from "@/components/Section.astro";
+import { getAllTalks, isUpcoming } from "@/utils/content";
+import { getAssetPath } from "@/utils/url";
+import { formatDate } from "@/utils/text";
+import { meetups } from "@/meetups";
+
+const allTalks = await getAllTalks();
+const upcoming = allTalks.filter(isUpcoming).sort((a, b) => a.data.date.valueOf() - b.data.date.valueOf());
+const talks = allTalks.filter((t) => !isUpcoming(t));
+---
+
+<BaseLayout title="Talks">
+  <div class="layout-content">
+    <PageHeader title="Talks" lede="Talks I've given with demo code. Sometimes they're recorded and sometimes they're not!" />
+    <Section title="Upcoming">
+      {upcoming.length > 0 ? (
+        <div>
+          {upcoming.map((talk) => (
+            <article class="group grid grid-cols-[6rem_1fr] items-baseline gap-4 border-b border-border/50 py-4">
+              <time
+                datetime={talk.data.date.toISOString()}
+                class="font-mono text-xs uppercase tabular-nums text-muted-foreground"
+              >
+                {formatDate(talk.data.date)}
+              </time>
+              <div class="space-y-1">
+                <h3 class="font-serif text-lg leading-snug">
+                  <a href={getAssetPath(`talks/${talk.id}`)} class="group-hover:underline">{talk.data.title}</a>
+                </h3>
+                <p class="font-mono text-xs uppercase text-muted-foreground">
+                  {talk.data.eventUrl
+                    ? <a href={talk.data.eventUrl} class="underline underline-offset-4 hover:text-foreground">{talk.data.event}</a>
+                    : talk.data.event}{talk.data.location ? ` · ${talk.data.location}` : ""}
+                </p>
+                <p class="text-sm text-muted-foreground">{talk.data.description}</p>
+                {talk.data.rsvpUrl && (
+                  <p class="pt-1 font-mono text-sm">
+                    <a href={talk.data.rsvpUrl} class="text-clay hover:underline">RSVP →</a>
+                  </p>
+                )}
+              </div>
+            </article>
+          ))}
+        </div>
+      ) : (
+        <p class="text-sm text-muted-foreground">No talks scheduled right now, but you can find me at a meetup!</p>
+      )}
+    </Section>
+
+    {talks.length > 0 && (
+    <Section title="Past talks">
+      <div class="grid gap-10 sm:grid-cols-2">
+        {talks.map((talk) => (
+          <article class="group flex flex-col gap-3">
+            {talk.data.cover && (
+              <a href={getAssetPath(`talks/${talk.id}`)} tabindex="-1" aria-hidden="true">
+                <Image
+                  src={talk.data.cover}
+                  alt=""
+                  width={800} height={533}
+                  fit={talk.data.coverFit === "contain" ? "contain" : "cover"}
+                  background="white"
+                  class:list={[
+                    "aspect-[3/2] w-full",
+                    talk.data.coverFit === "contain" ? "object-contain border border-border bg-white" : "object-cover",
+                  ]}
+                />
+              </a>
+            )}
+            <p class="font-mono text-xs uppercase text-muted-foreground">
+              {formatDate(talk.data.date)} · {talk.data.event}
+            </p>
+            <h2 class="font-serif text-xl leading-tight">
+              <a href={getAssetPath(`talks/${talk.id}`)} class="group-hover:underline">
+                {talk.data.title}
+              </a>
+            </h2>
+            <p class="text-sm text-muted-foreground">{talk.data.description}</p>
+          </article>
+        ))}
+      </div>
+    </Section>
+    )}
+
+    <Section title="My Meetups">
+      <ul class="space-y-2">
+        {meetups.map((m) => (
+          <li>
+            <span aria-hidden="true">{m.emoji}</span>{" "}
+            <a href={m.url} class="font-serif text-lg hover:underline">{m.name} →</a>
+          </li>
+        ))}
+      </ul>
+    </Section>
+  </div>
+</BaseLayout>
