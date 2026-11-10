@@ -32,16 +32,10 @@ related:
     url: https://valkey-py.readthedocs.io/en/latest/index.html
   - title: Valkey Search
     url: https://valkey.io/topics/search/
-  - title: How a Postgres Meetup Got Me Hooked
-    url: /blog/meetups-got-me-into-postgres
-    note: A blog post on why I value giving and getting help in local tech communities.
-# Thank you: people to thank by name (all fields but name are optional)
-# thanks:
-#   - name: Organizer Name
-#     role: Organizer
-#     url: https://example.com
-#     note: A short personal thank-you.
-# Remove this line to publish the talk.
+thanks:
+  - name: Paul Briant
+    role: Organizer
+    url: https://www.linkedin.com/in/paul-briant-034a9686/
 ---
 
 I gave this talk at [Puget Sound Programming Python (PuPPy)](https://www.pspython.com/) in August 2026. The focus was semantic search against a cache as a way to save money on RAG pipeline calls and agentic spend, with a demo using [valkey-py](https://github.com/valkey-io/valkey-py), the open source Python client, and `valkey-search` to search RGB color vectors by RGB ratio similarity. Semantic search support was added to the Valkey client as of March 2026. I learned about it at ValkeyConf and that's how I found this topic!

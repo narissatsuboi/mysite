@@ -8,14 +8,12 @@ import type { APIRoute, GetStaticPaths } from 'astro';
 import { getConfig } from '@/utils/config';
 import {
   getAllPosts,
-  getAllNotes,
   getAllPages,
-  getAllEntries,
+  getAllTalks,
+  getAllTags,
   getPostSlugPath,
-  getNoteSlugPath,
   getPageSlugPath,
 } from '@/utils/content';
-import { getMetaValues, getYears } from '@/utils/browse';
 import { renderOgImage } from '@/utils/og-image';
 
 export const prerender = true;
@@ -27,13 +25,11 @@ interface CardProps {
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const siteConfig = await getConfig();
-  const indexes = siteConfig.browse?.indexes ?? [];
-
-  const [allPosts, allNotes, allPages, allEntries] = await Promise.all([
+  const [allPosts, allPages, allTalks, allTags] = await Promise.all([
     getAllPosts(),
-    getAllNotes(),
     getAllPages(),
-    getAllEntries(),
+    getAllTalks(),
+    getAllTags(),
   ]);
 
   const entries: { params: { path: string }; props: CardProps }[] = [];
@@ -55,12 +51,14 @@ export const getStaticPaths: GetStaticPaths = async () => {
     });
   }
 
-  // ── Notes ───────────────────────────────────────────────────────────────
-  for (const note of allNotes) {
-    add(`notes/${getNoteSlugPath(note.id, note.filePath)}`, {
-      eyebrow: note.data.category ?? 'Note',
-      title:   note.data.title,
-    });
+  // ── Talks ───────────────────────────────────────────────────────────────
+  for (const talk of allTalks) {
+    add(`talks/${talk.id}`, { eyebrow: 'Talk', title: talk.data.title });
+  }
+
+  // ── Tags ────────────────────────────────────────────────────────────────
+  for (const { tag, slug } of allTags) {
+    add(`tags/${slug}`, { eyebrow: 'Tag', title: `#${tag}` });
   }
 
   // ── Pages ───────────────────────────────────────────────────────────────

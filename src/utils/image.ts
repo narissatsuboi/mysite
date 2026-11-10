@@ -79,42 +79,19 @@ export function shuffleArray<T>(array: T[]): T[] {
  * Resolve a vault-absolute image path to a glob key.
  *
  * Handles:
- *   posts/2011-03-21-bhuleshwar/attachments/image.jpg
- *   → /src/content/posts/2011-03-21-bhuleshwar/attachments/image.jpg
+ *   posts/attachments/image.jpg
+ *   → /src/content/posts/attachments/image.jpg
  */
 function vaultPathToGlobKey(vaultPath: string): string {
   // Already a glob key
   if (vaultPath.startsWith('/src/content/')) return vaultPath;
-  // Vault-absolute: posts/...
-  if (vaultPath.startsWith('travels/')) return `/src/content/${vaultPath}`;
-  // Fallback
+  // Vault-absolute, e.g. posts/attachments/image.jpg
   return `/src/content/${vaultPath}`;
 }
 
 // ============================================================================
 // COVER IMAGE
 // ============================================================================
-
-/**
- * Resolve a post's cover frontmatter value to ImageMetadata.
- *
- * Accepts vault-absolute Obsidian paths with or without [[ ]] brackets:
- *   [[travels/2011-03-21-bhuleshwar/attachments/image.jpg]]
- *   travels/2011-03-21-bhuleshwar/attachments/image.jpg
- *
- * Returns undefined if the path cannot be resolved (allows graceful fallback).
- */
-// export function getCoverImage(raw: string | undefined): ImageMetadata | undefined {
-//   if (!raw) return undefined;
-
-//   const stripped = stripObsidianBrackets(raw).trim();
-//   if (!stripped) return undefined;
-
-//   const globKey = vaultPathToGlobKey(stripped);
-
-//   const mod = allAttachmentImages[globKey];
-//   return mod?.default;
-// }
 
 export function normalizeCoverPath(
   raw: string | undefined
@@ -165,7 +142,7 @@ export function getCoverImage(
 
 /**
  * Get gallery images for a post, sorted by filename.
- * Reads from src/content/travels/{postDir}/gallery/
+ * Reads from src/content/posts/{postDir}/gallery/
  */
 export function getGalleryImages(filePath: string): GalleryImage[] {
   const postDir = extractPostDir(filePath);

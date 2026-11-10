@@ -1,13 +1,12 @@
 import type { UserConfig } from './types'
 
 export const defaultConfig: UserConfig = {
-  title:       'Patrika',
-  description: 'A field notebook, kept in the open',
-  url:         'https://example.com',
-  locale:      'en',
+  title:       'Narissa Tsuboi',
+  description: 'Talks, conferences, and things I\'ve learned',
+  url:         'https://narissatsuboi.github.io/mysite',
 
   author: {
-    name: 'Your Name',
+    name: 'Narissa Tsuboi',
   },
 
   navigation: [
@@ -22,15 +21,5 @@ export const defaultConfig: UserConfig = {
 
   social: [],
 
-  heroText:     'A field notebook, kept in the open',
   tagline:      'talks · conferences · learnings',
-  postsPerPage: 10,
-  recentPosts:  5,
-  showLogo:     false,
-
-  // Generic, no assumed keys — real indexes are configured per-site (see config.yaml).
-  browse: {
-    years:   true,
-    indexes: [],
-  },
 }

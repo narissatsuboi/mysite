@@ -1,36 +1,15 @@
-# ─────────────────────────────────────────────────────────────────────────────
-# Patrika — Site Configuration
-# ─────────────────────────────────────────────────────────────────────────────
-# This file lives alongside your content in your Obsidian vault.
-# Only include the fields you want to override.
-# Defaults are defined in src/config/site.config.ts
-# ─────────────────────────────────────────────────────────────────────────────
+# Site settings. Defaults for anything left out live in src/site.config.ts.
 
-# ── Site identity ─────────────────────────────────────────────────────────────
 - id: config
   title: Narissa Tsuboi
   description: Talks, conferences, and things I've learned
   url: https://narissatsuboi.github.io/mysite
-  locale: en
-
-  # ── Author ────────────────────────────────────────────────────────────────────
 
   author:
     name: Narissa Tsuboi
-    bio: llll
     url: https://github.com/narissatsuboi
-    # avatar: /images/avatar.jpg
 
-  # ── Assets ───────────────────────────────────────────────────────────────────
-  # Uncomment to use a logo or custom OG image.
-  # Paths are relative to /public
-
-  # logo: /images/logo.svg
-  # ogImage: /images/og-default.jpg
-
-  # ── Navigation ────────────────────────────────────────────────────────────────
-  # Top navigation links. Order here is order in the nav bar.
-
+  # Top navigation, in display order
   navigation:
     - title: Blog
       url: /blog
@@ -39,17 +18,11 @@
     - title: About
       url: /about
 
-
-  # ── Footer links ──────────────────────────────────────────────────────────────
-
   footerLinks:
     - title: RSS
       url: /rss.xml
 
-
-  # ── Social ────────────────────────────────────────────────────────────────────
-  # Icons drawn in the footer: github, linkedin, email
-
+  # Footer icons: github, linkedin, email
   social:
     - title: GitHub
       url: https://github.com/narissatsuboi
@@ -61,31 +34,3 @@
       url: mailto:narissatsuboi@gmail.com
       icon: email
 
-  # ── Content display ───────────────────────────────────────────────────────────
-
-  # Shown as the opening line on the garden homepage
-  heroText: Blog
-
-  # Shown in the footer (optional — remove the line to hide)
-  footerCredits: ""  # ← replace with your tagline, or delete this line
-
-  # Number of posts shown per archive page
-  postsPerPage: 8
-
-  # Number of recent entries shown on the homepage
-  recentPosts: 4
-
-  # ── Flags ─────────────────────────────────────────────────────────────────────
-
-  # Set to true if you have a logo defined above
-  showLogo: false
-
-  # ── Browse ────────────────────────────────────────────────────────────────────
-  # Generic index pages built from an optional `meta` object in post/note
-  # frontmatter. Each entry below turns `meta.<key>` into a browsable
-  # dimension at /browse/<slug>. Unconfigured meta keys are ignored.
-  # `slug` must not be "years" (that path is reserved for the date index).
-
-  browse:
-    years: false
-    indexes: []

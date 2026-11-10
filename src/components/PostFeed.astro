@@ -3,7 +3,7 @@ import type { CollectionEntry } from "astro:content";
 import PostFeedItem from "./PostFeedItem.astro";
 
 interface Props {
-  posts: (CollectionEntry<"posts"> | CollectionEntry<"notes"> | CollectionEntry<"talks">)[];
+  posts: (CollectionEntry<"posts"> | CollectionEntry<"talks">)[];
   variant?: "default" | "featured" | "archive";
 }
 

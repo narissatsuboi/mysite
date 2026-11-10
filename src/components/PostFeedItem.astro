@@ -3,12 +3,12 @@ import type { CollectionEntry } from "astro:content";
 import ImageWrapper from "@/components/ImageWrapper.astro";
 import TagList from "@/components/TagList.astro";
 import { getCoverImage } from "@/utils/image";
-import { getPostUrl, getNoteUrl } from "@/utils/content";
+import { getPostUrl } from "@/utils/content";
 import { formatDate, formatMonthYear } from "@/utils/text";
 import { getAssetPath } from "@/utils/url";
 
 interface Props {
-  post: CollectionEntry<"posts"> | CollectionEntry<"notes"> | CollectionEntry<"talks">;
+  post: CollectionEntry<"posts"> | CollectionEntry<"talks">;
   variant?: "default" | "featured" | "archive";
 }
 
@@ -17,18 +17,15 @@ const {
   variant = "default",
 } = Astro.props;
 
-const isNote = post.collection === "notes";
 const isTalk = post.collection === "talks";
 const published = isTalk ? post.data.date : post.data.published;
-const cover = isNote || isTalk ? undefined : getCoverImage(post.data.cover);
+const cover = isTalk ? undefined : getCoverImage(post.data.cover);
 const date = formatDate(published);
 const monthYear = formatMonthYear(published);
 const href = isTalk
   ? getAssetPath(`talks/${post.id}`)
-  : isNote
-    ? getNoteUrl(post.id, post.filePath)
-    : getPostUrl(post.id, post.filePath);
-const typeLabel = isTalk ? "Talk" : isNote ? "Note" : (post.data.category ?? "Post");
+  : getPostUrl(post.id, post.filePath);
+const typeLabel = isTalk ? "Talk" : (post.data.category ?? "Post");
 
 const isFeatured = variant === "featured";
 const isArchive = variant === "archive";

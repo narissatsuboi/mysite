@@ -1,4 +1,4 @@
-// src/config/getConfig.ts
+// src/utils/config.ts
 // Merges user YAML config over default values.
 // Import this in layouts and pages — never import site.config.ts directly.
 
